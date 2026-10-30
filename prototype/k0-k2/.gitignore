@@ -5,3 +5,4 @@ ref/
 meas/
 render/
 review/
+.venv/

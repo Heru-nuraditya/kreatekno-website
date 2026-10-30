@@ -1,0 +1,5 @@
+# Python untuk prototype/k0-k2/tools (solve.py, solve_hp.py, compare.py, grid.py, orange.py, prep.py)
+numpy==2.5.4
+opencv-python-headless==5.0.0.93
+pillow==13.0.0
+scipy==1.18.1

@@ -1,14 +1,14 @@
 // Render one keyframe under several lighting variants (JSON list) for comparison.
-const { chromium } = require('playwright');
-const path = require('path');
+const { launch, pageUrl, outDir: mkOut } = require('./browser');
 const [,, page_, outDir, fmt, key, variantsJson] = process.argv;
 const variants = JSON.parse(require('fs').readFileSync(variantsJson, 'utf8'));
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  mkOut(outDir);
+  const b = await launch();
   const vp = fmt === 'pc' ? { width: 1280, height: 720 } : { width: 450, height: 800 };
   const p = await b.newPage({ viewport: vp });
   p.on('pageerror', e => console.log('pageerror', e.message));
-  await p.goto('file://' + path.resolve(page_) + `?shot&fmt=${fmt}&k=${key}`);
+  await p.goto(pageUrl(page_, `shot&fmt=${fmt}&k=${key}`));
   await p.waitForFunction(() => window.__k02 && window.__k02.aoState().done, null, { timeout: 240000, polling: 500 });
   for (const [i, v] of variants.entries()) {
     await p.evaluate(v => {

@@ -3,10 +3,10 @@
 set -e
 cd "$(dirname "$0")"
 npx esbuild src/scene.js --bundle --minify --format=esm --target=es2020 --legal-comments=none --outfile=bundle.js --log-level=warning
-python3 - <<'PY'
-import gzip
-page = open('src/page.html').read(); js = open('bundle.js').read().replace('</script', '<\\/script')
-open('../k0-k2-3d.html', 'w').write(page.replace('/*BUNDLE*/', js))
-print('bundle', len(js) // 1024, 'KB, gzip', len(gzip.compress(js.encode(), 9)) // 1024, 'KB')
-PY
+node - <<'JS'
+const fs = require('fs'), zlib = require('zlib');
+const page = fs.readFileSync('src/page.html', 'utf8'), js = fs.readFileSync('bundle.js', 'utf8').replaceAll('</script', '<\\/script');
+fs.writeFileSync('../k0-k2-3d.html', page.replace('/*BUNDLE*/', () => js));
+console.log('bundle', js.length >> 10, 'KB, gzip', zlib.gzipSync(js, { level: 9 }).length >> 10, 'KB');
+JS
 rm -f bundle.js

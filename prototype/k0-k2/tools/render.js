@@ -1,10 +1,11 @@
 // Render keyframes of the built page with CDN requests served from local node_modules.
-const { chromium } = require('playwright');
+const { launch, pageUrl, outDir: mkOut } = require('./browser');
 const path = require('path');
 const [,, page_, outDir, which = 'pc,hp', keys = 'K0,K1,K2', extra = ''] = process.argv;
 const NM = path.join(__dirname, '..', 'node_modules') + '/';
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  mkOut(outDir);
+  const b = await launch();
   for (const fmt of which.split(',')) {
     const vp = fmt === 'pc' ? { width: 1280, height: 720 } : fmt === 'hp' ? { width: 450, height: 800 } : { width: 375, height: 812 };
     for (const k of keys.split(',')) {
@@ -18,7 +19,7 @@ const NM = path.join(__dirname, '..', 'node_modules') + '/';
       });
       const f = fmt === 'dev' ? 'hp' : fmt;
       const t0 = Date.now();
-      await p.goto('file://' + path.resolve(page_) + `?shot&fmt=${f}&k=${k}${extra}`);
+      await p.goto(pageUrl(page_, `shot&fmt=${f}&k=${k}${extra}`));
       await p.waitForFunction(() => window.__k02, null, { timeout: 60000 });
       const tReady = Date.now() - t0;
       await p.waitForFunction(() => window.__k02.aoState().done, null, { timeout: 240000, polling: 500 });
