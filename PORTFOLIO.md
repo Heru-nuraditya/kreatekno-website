@@ -1,5 +1,7 @@
 # Kreatekno Portfolio: Plan
 
+> **Superseded (2026-11-01)** by `SOLUSI-SPEC.md`: the Portofolio page became the Solusi page. Kept for reference only.
+
 _Drafted 2026-10-25. Status: prototype P1 in review (one project). Prototype: https://claude.ai/artifact/Aph1ui6sWtmXPSHoZui7yH (source `prototype/portfolio.src.html` → `prototype/build.py` → `prototype/kreatekno-portfolio.html`). Covers `/portofolio` and `/portofolio/[slug]` (EN `/en/portfolio`). Replaces the portfolio part of `SITE-BRIEF.md` section 6 and milestone M6/M7 (portfolio half) in `PLAN.md` once approved._
 
 ## 1. Idea in one paragraph

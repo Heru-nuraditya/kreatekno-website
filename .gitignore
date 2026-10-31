@@ -5,3 +5,9 @@ node_modules/
 Thumbs.db
 !.env.example
 .playwright-mcp/
+
+# Claude Code: personal notes, hook cache, reference images (never committed)
+CLAUDE.local.md
+.claude/.site-check
+.claude/settings.local.json
+.refs/

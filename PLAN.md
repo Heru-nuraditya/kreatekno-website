@@ -13,7 +13,8 @@ Rebuild kreatekno.com from scratch as a **mobile-first, scroll-story website** t
 | `SITE-BRIEF.md` | What the site says and how it behaves: references, review preferences, audience, conversion, other pages, look and feel, SEO. Its Home sections (2, 4, 5) still describe the old 6-beat story; see `STORY-STAGE.md` until they are rewritten |
 | `STORY-STAGE.md` | The Home story stage, the handoff between web and video: the 18 beats and 21 keyframes, camera moves, empty-scroll beats, prop positions for desktop and phone (copy cards on phones), surface lines and light per keyframe, what the HTML draws vs what the footage draws |
 | `THREEJS.md` | Three.js as an option for the Home stage: limits, trade-offs against footage, risks on low-end Android, and the beat 2 PoC (`prototype/beat2-3d.html`) |
-| `PORTFOLIO.md` | Portfolio plan (proposal, 2026-10-25): two modes per project (Tonton motion graphic, Baca case study) from one data file, scene types, 3 sample projects, n8n → page pipeline, phases |
+| `SOLUSI-SPEC.md` | **Solusi** page (replaces Portofolio, agreed 2026-11-01): shop with a 3D cashier and a glass catalogue, search, problem cards; phases, stages, data in `site/content/solusi/` |
+| `PORTFOLIO.md` | _Superseded by `SOLUSI-SPEC.md`._ Portfolio plan (proposal, 2026-10-25): two modes per project (Tonton motion graphic, Baca case study) from one data file, scene types, 3 sample projects, n8n → page pipeline, phases |
 | `COPY.md` | All copy in Indonesian and English, plus SEO titles and descriptions. Home copy still the old version; the current Home copy is in `site/messages/` (taken from the storyboard via the prototype) |
 | `STACK.md` | Libraries, folder structure, content model, routing, implementation notes, deploy |
 | `site/` | The Next.js app (see `site/README.md`). Home is the 18-beat story stage; the other pages are placeholders |
@@ -58,6 +59,13 @@ _Status: ✅ Done · 🟡 In progress · ⬜ Not started · ⛔ Blocked_
 Next up: answer the footage points for the video team (`STORY-STAGE.md` section 7, points 7 to 9) and check the beat 1 frames on a real phone; then Playwright tests per beat and an analytics check to close M5, a Vercel preview to close M4 (needs Kreatekno's Vercel account), and M7 once copy (M3) and inputs arrive. The keyframes (M8) can start now from `STORY-STAGE.md`.
 
 ## Progress log
+
+### 2026-11-01 (Solusi page set up for Claude Code)
+
+- Portofolio becomes **Solusi** (`/solusi`, EN `/en/solutions`), agreed with Wildan. Spec in `SOLUSI-SPEC.md`; reference prototype in `prototype/solusi-etalase.html`.
+- 12 solutions and 24 problem cards moved from the prototype into `site/content/solusi/` (one file per solution, zod-checked by `site/lib/solusi/schema.ts`). Nothing renders them yet.
+- Added a root `CLAUDE.md` (imports `site/AGENTS.md`) and a Stop hook (`.claude/hooks/check-site.mjs`) that runs typecheck + lint when `site/` changed.
+- Next: phase 1 (3D shop) in stages T0–T7, built with Claude Code on Heru's laptop.
 
 ### 2026-10-30 (Three.js take K0 → K2, stages 1–2)
 
