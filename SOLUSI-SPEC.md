@@ -145,19 +145,27 @@ Patokannya bagian "3D" di prototype, dari baris `/* ===... 3D ...=== */` sampai 
   - Pixel ratio dibatasi 1,5 di desktop. Turunkan kualitas bertahap dari fps terukur: matikan bayangan, pixel ratio 1, kurangi gerak kotak. Kalau masih jelek, tampilkan gambar diam (poster hero) dan matikan render.
   - Render berhenti saat tab tersembunyi atau canvas di luar layar.
   - Tangani `webglcontextlost`.
-- **HUD dev:** `?hud` menampilkan fps, draw call, segitiga, pixel ratio, dan tingkat kualitas. HUD ini dipakai Heru untuk tes di HP Android murah. Tidak pernah ditautkan dari halaman.
+- **Alat debug** (kontrak lengkap di `.claude/rules/threejs.md`, dibangun sejak T2):
+  - `?shot` membekukan waktu untuk screenshot;
+  - `?cam=<preset>` langsung ke preset kamera;
+  - `?hud` menampilkan fps, draw call, segitiga, pixel ratio, dan tingkat kualitas. HUD ini dipakai Heru untuk tes di HP Android murah;
+  - `?quality=low|mid|high` memaksa tingkat kualitas;
+  - `?markers` menampilkan penanda posisi penting;
+  - `window.__solusi3d` (`ready`, `info()`, `setCam()`) dipakai `npm --prefix site run shots`.
+
+  Tidak pernah ditautkan dari halaman.
 
 ## 7. Tahapan kerja (berhenti untuk review di akhir setiap tahap)
 
 | # | Tahap | Hasil yang direview |
 |---|---|---|
 | T0 | Riset terbaru (Three.js 0.187 + Next.js 16.4 Cache Components, karakter dari bentuk dasar, swipe yang aksesibel), lalu tanya sampai yakin 98%, lalu buat plan di Plan mode | Temuan riset + plan disetujui |
-| T1 | Routing, redirect, menu, messages, halaman `/solusi` statis (H1, etalase HTML, versi tanpa 3D) | Screenshot 1440/375, `npm run build` lolos |
-| T2 | Adegan toko 3D (set, kamera hero/fokus) + kotak etalase 3D (satu canvas, idle + hover), dimuat setelah HTML | Screenshot + angka draw call/segitiga/ukuran chunk |
+| T1 | Routing, redirect, menu, messages, halaman `/solusi` statis (H1, etalase HTML, versi tanpa 3D) | Screenshot 1440/375 dari `npm --prefix site run shots`, `npm run build` lolos |
+| T2 | Adegan toko 3D (set, kamera hero/fokus) + kotak etalase 3D (satu canvas, idle + hover), dimuat setelah HTML, plus alat debug (`?shot`, `?cam`, `?hud`, `?quality`, `?markers`, `window.__solusi3d`) | Screenshot per preset kamera + angka draw call/segitiga/ukuran chunk dari `.shots/report.json` |
 | T3 | Kasir Heru dari bentuk dasar + pose | Screenshot berdampingan dengan `HERU.png` (Heru menaruhnya di `.refs/`) |
 | T4 | Mode Cari solusi (struk, filter, kasir meletakkan kotak bernomor, versi HP ringkas) | Rekaman atau urutan screenshot desktop + HP |
 | T5 | Mode Kartu masalah + halaman hasil `/solusi/hasil` | Alur 9 kartu sampai hasil, keyboard dan swipe |
-| T6 | Kualitas HP: tingkat kualitas, fallback gambar diam, reduced motion, context lost; Playwright + axe | Hasil tes + Heru mengetes di HP Android murah lewat `?hud` |
+| T6 | Kualitas HP: tingkat kualitas, fallback gambar diam, reduced motion, context lost; tes Playwright + axe (`test:e2e`); trace performa lewat Chrome DevTools MCP (CPU 4x lebih lambat, 375×812) | Hasil tes + Heru mengetes di HP Android murah lewat `?hud` |
 | T7 | Update `PLAN.md` (milestone + log), tandai `PORTFOLIO.md` digantikan, commit, push branch ke fork, buka PR ke `iwilwildan/kreatekno-website` | Link PR |
 
 ## 8. Definisi selesai fase 1
@@ -172,7 +180,7 @@ Patokannya bagian "3D" di prototype, dari baris `/* ===... 3D ...=== */` sampai 
 - Tidak ada link mati. Kotak di fase 1 memang tidak bisa diklik.
 - Diuji Heru di HP Android murah, dan angka fps dicatat di `PLAN.md`.
 
-Playwright dan `@axe-core/playwright` belum terpasang. Pasang di T6 dengan versi terbaru yang stabil, lalu tambah script `test:e2e`.
+Playwright 1.64.1 sudah terpasang untuk `npm --prefix site run shots` (screenshot review). `@axe-core/playwright` dan script `test:e2e` ditambahkan di T6, dengan persetujuan Heru untuk paket baru.
 
 ## 9. Catatan terbuka
 
@@ -189,8 +197,22 @@ cd $HOME\Documents\GitHub\kreatekno-website
 git status                      # harus bersih sebelum mulai
 git pull                        # ambil perubahan terbaru branch ini dari fork
 npm --prefix site ci
+npm --prefix site exec playwright install chromium   # sekali per laptop
 claude
 ```
+
+Sekali per laptop, sebelum sesi pertama:
+
+1. **Plugin TypeScript.** Plugin ini membuat Claude langsung melihat error tipe setiap kali mengedit file.
+   - Jalankan `npm install -g typescript-language-server typescript` di PowerShell.
+   - Di Claude Code, jalankan `/plugin install typescript-lsp@claude-plugins-official`, atau pasang lewat menu plugin di aplikasi desktop.
+   - Untuk mengecek: di PowerShell, `Get-Command typescript-language-server` harus menemukan programnya.
+2. **Chrome DevTools MCP.** Di sesi pertama, Claude Code menanyakan izin untuk server `chrome-devtools` dari `.mcp.json`. Pilih izinkan. Server ini butuh Google Chrome terpasang.
+3. **Cek di awal sesi.**
+   - `/context`: memastikan `CLAUDE.md` terbaca.
+   - `/hooks`: memastikan ada dua hook, PostToolUse (format) dan Stop (cek).
+   - `/mcp`: memastikan `chrome-devtools` aktif.
+   - `/skills`: memastikan `verify` dan `threejs-*` muncul.
 
 Prompt pertama, dijalankan di Plan mode (Shift+Tab sampai "plan mode"):
 

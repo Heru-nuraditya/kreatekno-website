@@ -11,3 +11,4 @@ CLAUDE.local.md
 .claude/.site-check
 .claude/settings.local.json
 .refs/
+.shots/

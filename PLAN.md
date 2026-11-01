@@ -67,6 +67,7 @@ Next up: answer the footage points for the video team (`STORY-STAGE.md` section 
 - Added a root `CLAUDE.md` (imports `site/AGENTS.md`) and a Stop hook (`.claude/hooks/check-site.mjs`) that runs typecheck + lint when `site/` changed.
 - Next: phase 1 (3D shop) in stages T0–T7, built with Claude Code on Heru's laptop.
 - The Solusi cashier is built for Solusi only (simple code shapes); it does not reuse the K0–K2 character work. The K0–K2 take is continued by Wildan.
+- Claude Code setup for Three.js work: path rules in `.claude/rules/` (threejs, nextjs, content), a `verify` skill, `spec-reviewer` and `visual-qa` subagents, a Prettier hook after edits, ask-before rules for commit/push/npm install, Chrome DevTools MCP (`.mcp.json`), `npm --prefix site run shots` (Playwright 1.64.1) and 8 `threejs-*` reference skills from cloudai-x/threejs-skills (r186).
 
 ### 2026-10-30 (Three.js take K0 → K2, stages 1–2)
 

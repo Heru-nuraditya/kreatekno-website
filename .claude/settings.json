@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/format-file.mjs\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -13,6 +25,26 @@
     ]
   },
   "permissions": {
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "Bash(npm install *)",
+      "Bash(npm i *)",
+      "Bash(npm add *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm --prefix site install *)",
+      "Bash(npm --prefix site i *)",
+      "Bash(npm --prefix site uninstall *)",
+      "PowerShell(npm install *)",
+      "PowerShell(npm i *)",
+      "PowerShell(npm add *)",
+      "PowerShell(npm uninstall *)",
+      "PowerShell(npm --prefix site install *)",
+      "PowerShell(npm --prefix site i *)",
+      "PowerShell(npm --prefix site uninstall *)"
+    ],
     "deny": ["Read(./site/.env.local)", "Read(./.env)"]
   }
 }
