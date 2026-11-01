@@ -8,7 +8,7 @@ Referensi tampilan dan perilaku: `prototype/solusi-etalase.html`. Buka langsung 
 
 ## 1. Ringkasan
 
-Halaman Solusi adalah **toko**. Seorang kasir (Heru, karakter vinyl-toy 3D dari kode) berdiri di balik meja panjang.
+Halaman Solusi adalah **toko**. Seorang kasir (Heru, karakter 3D dari bentuk-bentuk sederhana yang dibuat dengan kode) berdiri di balik meja panjang.
 
 - **Etalase:** kaca di depan meja berisi semua solusi. Setiap solusi berupa kotak 3D di atas label rak. Etalase ikut bertambah panjang saat katalog bertambah.
 - **Dua tombol:** "Cari solusi" dan "Kartu masalah". Keduanya memindahkan kamera ke atas meja. Di sana kasir menyerahkan hasil pencarian, atau membagikan kartu masalah.
@@ -28,9 +28,9 @@ Tujuannya:
 | URL | `/solusi` (EN `/en/solutions`). `/portofolio` dan `/en/portfolio` di-redirect permanen (308) ke URL baru. Detail (fase 2): `/solusi/[slug]`. Hasil kartu: `/solusi/hasil` (EN `/en/solutions/results`) |
 | Bahasa | Tanpa redirect otomatis dari IP (panduan Google, dan repo memakai `localeDetection: false`). Fase 2: pengunjung dari luar Indonesia melihat bar kecil "View in English" yang bisa ditutup. Switcher bahasa tetap di header dan footer |
 | Urutan fase | **3D dulu.** Fase 1 = toko 3D lengkap. Fase 2 = halaman detail + EN + SEO/AEO |
-| 3D | Three.js **vanilla** (sama dengan K0–K2 di `prototype/k0-k2`), `three` 0.187.x, `WebGLRenderer`. Tanpa React Three Fiber. Semua bentuk dari kode, tanpa file model |
+| 3D | Three.js **vanilla**, `three` 0.187.x, `WebGLRenderer`. Tanpa React Three Fiber. Semua bentuk dari kode, tanpa file model. Kode 3D Solusi **berdiri sendiri**: tidak mengimpor atau menyalin apa pun dari `prototype/k0-k2/` (take K0–K2, dilanjutkan Wildan) atau dari `eksperimen/` |
 | Data | Satu file per solusi di `site/content/solusi/items/`, bank kartu di `kartu.ts`, divalidasi zod (`site/lib/solusi/schema.ts`). Sudah berisi 12 solusi dan 24 kartu dari prototype |
-| Kasir | **Heru** gaya vinyl-toy K0–K2, sesuai character sheet `KARKATER/HERU.png` **ditambah celemek ungu Kreatekno**. Ini karakter vinyl-toy pertama; modulnya harus bisa dipakai ulang untuk Home (tahap 3 K0–K2) |
+| Kasir | **Heru dari bentuk sederhana kode**, seperti kasir di prototype Etalase (kapsul, bola, kotak). Wajah dan pakaian mengikuti character sheet `HERU.png`, **ditambah celemek ungu Kreatekno**. Khusus halaman Solusi: **tidak terkait** dengan eksperimen karakter K0–K2 |
 | Label status | "Sudah berjalan" / "Siap dibuat" (EN "Live" / "Ready to build") |
 | Bentuk kotak | Bentuk sama untuk semua. Warna dari aplikasi pertama (`APPS[].color`). Gerak hanya idle + hover, **tanpa animasi scroll** |
 | HP murah | 3D versi ringan: pixel ratio 1, tanpa bayangan, gerak kotak dikurangi. Kalau fps tetap jelek, turun ke gambar diam. Semua fitur tetap jalan sebagai HTML |
@@ -106,8 +106,8 @@ site/
   lib/solusi/search.ts                          pencarian + filter (fungsi murni, mudah dites)
   lib/solusi/kartu.ts                           ronde, penilaian, hasil (fungsi murni)
   components/solusi/                            Etalase, LabelRak, StrukCari, DekKartu, HasilKartu, Toko (client)
-  lib/three/                                    renderer, kualitas, kotak produk, adegan toko, kamera
-  lib/three/characters/heru.ts                  Heru vinyl-toy + rig + pose (dipakai ulang Home nanti)
+  lib/solusi/three/                             renderer, kualitas, kotak produk, adegan toko, kamera
+  lib/solusi/three/kasir.ts                     kasir Heru dari bentuk dasar + pose (khusus Solusi)
 ```
 
 - Teks UI masuk ke `messages/{id,en}.json` di bawah `pages.solutions` dan `meta.solutions`. Key `portfolio` diganti.
@@ -127,19 +127,18 @@ Patokannya bagian "3D" di prototype, dari baris `/* ===... 3D ...=== */` sampai 
   - Satu geometri dengan sisi berwarna aplikasi, label depan berisi glyph aplikasi, dan tepi tipis.
   - Kotak "Siap dibuat" tampil sebagai versi garis tepi atau transparan, mengikuti prototype.
   - Gerak: ayunan idle pelan dan putaran saat hover.
-- **Kasir Heru:**
-  - Proporsi vinyl-toy sekitar 4,2 kepala.
-  - Wajah: mata hitam mengkilap tanpa putih, alis tebal, hidung kecil, pipi merona.
-  - Rambut: hitam bergelombang sebatas dagu dengan belahan samping. Kumis tipis dan janggut dagu.
-  - Pakaian: blazer ungu, kaos putih, lanyard ungu dengan kartu ID, dan **celemek ungu Kreatekno** di atasnya. Tas selempang dihilangkan kalau mengganggu celemek, dikonfirmasi saat review.
-  - Ikuti keputusan teknis K0–K2 di `prototype/k0-k2/HANDOFF.md`:
-    - rambut dari SDF → `MarchingCubes`, dengan versi sederhana untuk mode hemat;
-    - pegas dan redaman ditulis sendiri;
-    - `@pixiv/three-vrm-springbone` boleh dipakai untuk gerak sekunder.
+- **Kasir Heru** (patokan: bagian `/* --- the cashier ... */` di prototype):
+  - Dibangun dari bentuk dasar Three.js (kapsul, bola, kotak, torus), dengan pose yang diblend per frame. Tidak memakai SDF, file model, atau kode dari take K0–K2.
+  - Mirip Heru di `HERU.png`:
+    - rambut hitam bergelombang sebatas dagu dengan belahan samping;
+    - blazer ungu, kaos putih, lanyard ungu dengan kartu ID, celana abu gelap;
+    - **celemek ungu Kreatekno** di atasnya.
+  - Ditanyakan saat T3: kumis dan janggut, tas selempang, dan dua opsi warna celemek supaya tidak menyatu dengan blazer.
   - Pose: idle (bernapas), melambai, jongkok di bawah meja, meletakkan kotak (maksimal 6, bernomor), dan membagikan kartu.
-  - Bandingkan berdampingan dengan turnaround dari depan, samping dan belakang.
+  - Gerak: pegas dan redaman sederhana yang ditulis sendiri, tanpa engine fisika.
+  - Review: bandingkan berdampingan dengan `HERU.png` (depan dan samping).
 - **Anggaran:**
-  - Draw call di bawah ±120 dan segitiga di bawah ±150 ribu untuk seluruh adegan. Kasir ±5–15 ribu segitiga.
+  - Draw call di bawah ±120 dan segitiga di bawah ±150 ribu untuk seluruh adegan. Kasir ±2–6 ribu segitiga; geometri digabung per material supaya draw call kasir sedikit.
   - Chunk Three.js ±200 KB gzip atau kurang, dan hanya dimuat di `/solusi`.
   - LCP tetap teks H1, CLS < 0,1, dan Lighthouse mobile ≥ 85.
 - **Kualitas otomatis:**
@@ -152,10 +151,10 @@ Patokannya bagian "3D" di prototype, dari baris `/* ===... 3D ...=== */` sampai 
 
 | # | Tahap | Hasil yang direview |
 |---|---|---|
-| T0 | Riset terbaru (Three.js 0.187 + Next.js 16.4 Cache Components, karakter vinyl dari kode, swipe yang aksesibel), lalu tanya sampai yakin 98%, lalu buat plan di Plan mode | Temuan riset + plan disetujui |
+| T0 | Riset terbaru (Three.js 0.187 + Next.js 16.4 Cache Components, karakter dari bentuk dasar, swipe yang aksesibel), lalu tanya sampai yakin 98%, lalu buat plan di Plan mode | Temuan riset + plan disetujui |
 | T1 | Routing, redirect, menu, messages, halaman `/solusi` statis (H1, etalase HTML, versi tanpa 3D) | Screenshot 1440/375, `npm run build` lolos |
 | T2 | Adegan toko 3D (set, kamera hero/fokus) + kotak etalase 3D (satu canvas, idle + hover), dimuat setelah HTML | Screenshot + angka draw call/segitiga/ukuran chunk |
-| T3 | Heru vinyl-toy + rig + pose | Screenshot berdampingan dengan turnaround; Heru mengirim referensi kalau Drive tidak tersambung |
+| T3 | Kasir Heru dari bentuk dasar + pose | Screenshot berdampingan dengan `HERU.png` (Heru menaruhnya di `.refs/`) |
 | T4 | Mode Cari solusi (struk, filter, kasir meletakkan kotak bernomor, versi HP ringkas) | Rekaman atau urutan screenshot desktop + HP |
 | T5 | Mode Kartu masalah + halaman hasil `/solusi/hasil` | Alur 9 kartu sampai hasil, keyboard dan swipe |
 | T6 | Kualitas HP: tingkat kualitas, fallback gambar diam, reduced motion, context lost; Playwright + axe | Hasil tes + Heru mengetes di HP Android murah lewat `?hud` |
@@ -183,11 +182,12 @@ Playwright dan `@axe-core/playwright` belum terpasang. Pasang di T6 dengan versi
 
 ## 10. Cara mulai di Claude Code (laptop Heru)
 
+Folder lokal Heru: `Documents\GitHub\kreatekno-website`. Ini clone repo Wildan (`origin`), ditambah remote `fork` untuk repo Heru. Per 1 Nov folder ini sudah bersih dan berada di branch `feat/solusi-claude-setup`.
+
 ```powershell
-git clone https://github.com/Heru-nuraditya/kreatekno-website
-cd kreatekno-website
-git checkout feat/solusi-claude-setup
-git remote add upstream https://github.com/iwilwildan/kreatekno-website
+cd $HOME\Documents\GitHub\kreatekno-website
+git status                      # harus bersih sebelum mulai
+git pull                        # ambil perubahan terbaru branch ini dari fork
 npm --prefix site ci
 claude
 ```
@@ -195,3 +195,5 @@ claude
 Prompt pertama, dijalankan di Plan mode (Shift+Tab sampai "plan mode"):
 
 > Baca CLAUDE.md dan SOLUSI-SPEC.md, lalu kerjakan tahap T0: riset dulu, laporkan temuan yang mengubah rencana, dan tanya saya sampai kamu yakin 98% sebelum membuat plan untuk fase 1.
+
+Push selalu ke `fork` (`git push fork feat/solusi-...`), lalu buka PR ke `iwilwildan/kreatekno-website`.

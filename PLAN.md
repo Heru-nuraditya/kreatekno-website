@@ -66,6 +66,7 @@ Next up: answer the footage points for the video team (`STORY-STAGE.md` section 
 - 12 solutions and 24 problem cards moved from the prototype into `site/content/solusi/` (one file per solution, zod-checked by `site/lib/solusi/schema.ts`). Nothing renders them yet.
 - Added a root `CLAUDE.md` (imports `site/AGENTS.md`) and a Stop hook (`.claude/hooks/check-site.mjs`) that runs typecheck + lint when `site/` changed.
 - Next: phase 1 (3D shop) in stages T0–T7, built with Claude Code on Heru's laptop.
+- The Solusi cashier is built for Solusi only (simple code shapes); it does not reuse the K0–K2 character work. The K0–K2 take is continued by Wildan.
 
 ### 2026-10-30 (Three.js take K0 → K2, stages 1–2)
 

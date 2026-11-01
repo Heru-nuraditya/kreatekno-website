@@ -19,9 +19,9 @@ Start from `PLAN.md` (milestones, decisions, progress log). Current task: the **
 - Reply in Indonesian. Plain words, no jargon without a short explanation.
 - Before each stage: research the current docs and best practice online, report anything that changes the plan, then ask until you are 98% sure. Only then plan, and only then build.
 - Stop at the end of every stage for review: send screenshots (desktop 1440, phone 375) in the chat, list what was checked and what was not.
-- Heru reviews on his laptop. Commit only when he says the stage is OK. Never push to `iwilwildan/kreatekno-website`: push a branch to the fork `Heru-nuraditya/kreatekno-website` and open a PR to Wildan's repo.
-- Google Drive: only the files listed in `prototype/k0-k2/HANDOFF.md` (section "Referensi"). If Drive is not connected, ask Heru to put the file in `.refs/` (gitignored). Never commit reference images.
-- All 3D is built in code: no model files (GLB/FBX), no external 3D assets.
+- Heru reviews on his laptop. Commit only when he says the stage is OK. Never push to `iwilwildan/kreatekno-website`: push a branch to the fork `Heru-nuraditya/kreatekno-website` (remote `fork` in Heru's local clone; `origin` there is Wildan's repo) and open a PR to Wildan's repo.
+- Reference images (e.g. `HERU.png`): Heru puts them in `.refs/` (gitignored). Use Google Drive only for files Heru names. Never commit reference images.
+- Solusi 3D is built in code from basic shapes: no model files (GLB/FBX), no external 3D assets, and nothing imported or copied from `prototype/k0-k2/` or `eksperimen/`.
 
 ## Conventions and gotchas
 
@@ -34,3 +34,5 @@ Start from `PLAN.md` (milestones, decisions, progress log). Current task: the **
 - Main action is "Konsultasi gratis" through `WhatsAppButton` (with a `section` prop for analytics). No prices.
 - Animate only `transform` and `opacity`. Respect `prefers-reduced-motion`. Three.js and GSAP load only on the pages that use them, after the HTML.
 - `prototype/` holds reference HTML (do not import it into `site/`). `archive/` is history only.
+- `prototype/k0-k2/` is the Three.js Home take, continued by Wildan: do not change it during Solusi work.
+- `eksperimen/` is Heru's local experiment folder (listed in `.git/info/exclude`, never committed until Heru decides). One subfolder per experiment, named `<tanggal> <Bln> - <judul singkat>`, e.g. `31 Okt - karakter heru blender`. New experiments go there; touch existing ones only when Heru asks.
